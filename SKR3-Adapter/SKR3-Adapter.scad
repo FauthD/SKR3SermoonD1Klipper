@@ -58,7 +58,8 @@ Drill5=[101.22, 2.56, 0];
 
 Rounding=MountDiameter/2;
 
-Offset_Y=18;
+Offset_X=10;
+Offset_Y=16;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Some helpers to round combined objects
@@ -188,12 +189,14 @@ module BasePlate()
    {
       rotate([0,0,90])
          square([BoardLenght+1.5, BoardWidth+1.5], center=true);
-      y=0.6*E3Mini.y;
-      translate([Rounding/2-1/2, 2-y/2-Offset_Y])
-         square([E3Mini.x+2, y], center=true);
-      // space for step down regulators
-      translate([-E3Mini.x/2, -BoardWidth/2+19])
-         square([34, 70], center=true);
+      x=E3Mini.x+32;
+      y=E3Mini.y;
+      translate([-x/4, y/2-BoardLenght/2-3])
+         square([x/2, y], center=true);
+      translate([x/4-15, y/2-BoardLenght/2+8])
+         square([x/2, y], center=true);
+      translate([x/4, 5.8-BoardLenght/2])
+         square([x/2, y/4], center=true);
    }
 }
 
@@ -201,33 +204,27 @@ module CoolingHelper()
 {
    RoundExtrude(Rounding, 10*Thickness)
    {
-      translate([0, 0.8])
-         square([45,90],center=true);
+      translate([7, 4])
+         square([40,85],center=true);
 
-      translate([DrillLenght/2-19, 2-DrillWidth/2])
-         square([21,16],center=true);
+      translate([7, 20-DrillWidth/2])
+         square([70,53],center=true);
    }
 }
 
 module BoardHolder()
 {
-   difference()
+   BasePlate();
+   rotate([0,0,90])
    {
-      union()
+      for(x=[-1,1])
       {
-         BasePlate();
-         rotate([0,0,90])
+         for(y=[-1,1])
          {
-            for(x=[-1,1])
-            {
-               for(y=[-1,1])
-               {
-                  translate([x*DrillLenght/2, y*DrillWidth/2, MountHeight/2+Thickness/2])
-                     cylinder(d=MountDiameter-1.5, h=MountHeight, center=true);
-                  translate([x*DrillLenght/2, y*DrillWidth/2, MountHeight/2+Thickness/2])
-                     cylinder(d=MountDiameter, h=MountHeight-2.5, center=true);
-               }
-            }
+            translate([x*DrillLenght/2, y*DrillWidth/2, MountHeight/2+Thickness/2])
+               cylinder(d=MountDiameter-1.5, h=MountHeight, center=true);
+            translate([x*DrillLenght/2, y*DrillWidth/2, MountHeight/2+Thickness/2])
+               cylinder(d=MountDiameter, h=MountHeight-2.5, center=true);
          }
       }
    }
@@ -251,11 +248,11 @@ module Adapter()
 
       rotate([0,0,90])
          SKR3Holes();
-         translate([-E3Mini.x/2, -E3Mini.y/2-Offset_Y, 0])
+         translate([-E3Mini.x/2+Offset_X, -E3Mini.y/2-Offset_Y, 0])
             CrealityHoles(CrealityDrillDiameter);
 
       dept=Thickness;
-      translate([-E3Mini.x/2, -E3Mini.y/2-Offset_Y, 0])
+      translate([-E3Mini.x/2+Offset_X, -E3Mini.y/2-Offset_Y, 0])
          CrealityHoles(6.5,dept);
       
       // improve cooling
