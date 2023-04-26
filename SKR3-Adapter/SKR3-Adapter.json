@@ -26,7 +26,7 @@
             "UseExpBoard": "true",
             "UseFan": "true"
         },
-        "SKR3-Adapter_withFan": {
+        "SKR3-Adapter-withFan": {
             "BoardLenght": "109.7",
             "BoardWidth": "84.3",
             "CrealityDrillDiameter": "3.8",
@@ -52,7 +52,7 @@
             "UseExpBoard": "false",
             "UseFan": "true"
         },
-        "SKR3-Adapter_withFan_withExpBoard": {
+        "SKR3-Adapter-withFan-withExpBoard": {
             "BoardLenght": "109.7",
             "BoardWidth": "84.3",
             "CrealityDrillDiameter": "3.8",
