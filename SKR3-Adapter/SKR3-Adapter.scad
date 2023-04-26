@@ -41,9 +41,15 @@ FanScrewDistance=105;
 // For M4 heat inserts use 5.4 else 3.5.
 FanScrewDiameters=5.4;
 FanMountingPostDiameter=14;
-FanHeight=34;
+FanHeight=36;
 // Move Fan to the left
 FanOffset_X=2;
+
+/* [EXP-Board] */
+UseExpBoard=true;
+ExpDistance=2;
+ExpBoardLenght=46.0;
+ExpDrillLenght=38.0;
 
 /* [Hidden] */
 
@@ -75,7 +81,8 @@ Drill5=[101.22, 2.56, 0];
 
 Rounding=MountDiameter/2;
 
-
+FanOffset_Y=UseExpBoard ? 17 : 0;
+Enlarge=1.5;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Some helpers to round combined objects
@@ -162,7 +169,7 @@ module PcbMount(size, pcb)
 
 module StepDown_MP1584EN()
 {
-   PcbMount(size=[22.5, 17, 6], pcb=1.4);
+   PcbMount(size=[22.5, 17.1, 6], pcb=1.4);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -219,26 +226,45 @@ module SKR3Holes()
       }
 }
 
+module ExpHoles()
+{
+      for(x=[-1,1])
+      {
+         for(y=[-1,1])
+         {
+            translate([x*ExpDrillLenght/2, y*DrillWidth/2, 0])
+               cylinder(d=SkrDrillDiameter, h=10*Thickness);
+         }
+      }
+}
+
 module BasePlate()
 {
    r=UseFan ? FanMountingPostDiameter/2 : Rounding;
+
    RoundExtrude(r, Thickness)
    {
       rotate([0,0,90])
-         square([BoardLenght+1.5, BoardWidth+1.5], center=true);
+         square([BoardLenght+Enlarge, BoardWidth+Enlarge], center=true);
       x=E3Mini.x+32;
       y=E3Mini.y+7;
-      translate([-x/4, y/2-BoardLenght/2-2])
-         square([x/2, y], center=true);
+      translate([-x/4, y/2-BoardLenght/2-2+FanOffset_Y/2])
+         square([x/2, y+FanOffset_Y], center=true);
       translate([x/4-15, y/2-BoardLenght/2+8])
          square([x/2, y], center=true);
       translate([x/4, y/8-BoardLenght/2-2])
          square([x/2, y/4], center=true);
       
+      if(UseExpBoard)
+      {
+         translate([0, BoardWidth+Enlarge])
+            square([BoardWidth+2*Enlarge, ExpBoardLenght+2*Enlarge+ExpDistance], center=true);
+      }
+
       if(UseFan)
       {
          size=FanDiameter-1;
-         translate([-FanOffset_X, 0])
+         translate([-FanOffset_X, FanOffset_Y])
             square([size, size], center=true);
       }
    }
@@ -256,21 +282,47 @@ module CoolingHelper()
    }
 }
 
-module BoardHolder()
-{
-   BasePlate();
-   rotate([0,0,90])
+module BoardMounts(l,w)
    {
       for(x=[-1,1])
       {
          for(y=[-1,1])
          {
-            translate([x*DrillLenght/2, y*DrillWidth/2, MountHeight/2+Thickness])
+            translate([x*l/2, y*w/2, MountHeight/2+Thickness])
                cylinder(d=MountDiameter-1.5, h=MountHeight, center=true);
-            translate([x*DrillLenght/2, y*DrillWidth/2, MountHeight/2+Thickness-1])
+            translate([x*l/2, y*w/2, MountHeight/2+Thickness-1])
                cylinder(d=MountDiameter, h=MountHeight-2, center=true);
          }
       }
+   }
+
+module BoardHolder()
+{
+   BasePlate();
+   rotate([0,0,90])
+   {
+      BoardMounts(DrillLenght, DrillWidth);
+      if(UseExpBoard)
+      {
+         translate([BoardWidth+Enlarge+ExpDistance,0,0])
+            BoardMounts(ExpDrillLenght, DrillWidth);
+      }
+   }
+   if(UseExpBoard)
+   {
+      // enforcing a bit
+      w=3;
+      h=3;
+      // l1=60;
+      // translate([-0.7*l1+3, 0.7*l1+5, Thickness+h/2])
+      //    rotate([0,0,35])
+      //       cube([w, l1, h], center=true);
+      l2=ExpBoardLenght+40+ExpDistance;
+      translate([DrillWidth/2, l2/2+15, Thickness+h/2])
+         cube([w, l2, h], center=true);
+      l3=ExpBoardLenght+74+ExpDistance;
+      translate([-DrillWidth/2, l3/2-14, Thickness+h/2])
+         cube([w, l3, h], center=true);
    }
 }
 
@@ -284,7 +336,7 @@ module Adapter()
          extra=4.5;
          for(n=[0,-1])
          {
-            translate([-E3Mini.x/2-extra, n*34+3, Thickness/2])
+            translate([-E3Mini.x/2-extra, n*34+3+FanOffset_Y, Thickness/2])
                rotate([0,0,90])
                   StepDown_MP1584EN();
          }
@@ -292,8 +344,12 @@ module Adapter()
 
       translate([0,0, Thickness])
          rotate([0,0,90])
+         {
             SKR3Holes();
-      
+            translate([BoardWidth+Enlarge+ExpDistance,0,0])
+               ExpHoles();
+         }
+
       translate([-E3Mini.x/2+Offset_X, -E3Mini.y/2-Offset_Y, 0])
          CrealityHoles(CrealityDrillDiameter);
 
@@ -307,10 +363,10 @@ module Adapter()
    }
    if(UseFan)
    {
-      translate([-FanOffset_X,0, FanHeight/2+Thickness])
+      translate([-FanOffset_X, FanOffset_Y, FanHeight/2+Thickness])
          Fan(h=FanHeight+Epsilon);
       // improve cooling underneat the board
-      translate([FanScrewDistance/2+FanMountingPostDiameter/2-2/2-FanOffset_X, 0, MountHeight/2+Thickness])
+      translate([FanScrewDistance/2+FanMountingPostDiameter/2-2/2-FanOffset_X, FanOffset_Y, MountHeight/2+Thickness])
          cube([2, FanScrewDistance, MountHeight], center=true);
    }
 }
