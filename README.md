@@ -7,7 +7,7 @@ I will add details here when it is ready and works.
 # Progress
 
 ## Mechanics
-Created an adapter to mount the SKR 3 since it does not fit to the mounting holes. Later I added some mounts for a big 120mm fan (because it was easier with a fan larger than the board). The fan runs woth about 600 rmp and is barly audible.
+Created an adapter to mount the SKR 3 since it does not fit to the mounting holes. Later I added some mounts for a big 120mm fan (because it was easier with a fan larger than the board). The fan runs with about 600 rmp and is barly audible.
 
 Since I plan to add an extra stepper for a auxilary feeder, some space for the BTT Exp board was neccessary (now we are at 3 flavours).
 
@@ -15,10 +15,10 @@ Since I plan to add an extra stepper for a auxilary feeder, some space for the B
 | :----: | :----: | :----: |
 | <img src="SKR3-Adapter/PNG/SKR3-Adapter.png" width="80%" height="80%"> | <img src="SKR3-Adapter/PNG/SKR3-Adapter-withFan.png" width="80%" height="80%"> | <img src="SKR3-Adapter/PNG/SKR3-Adapter-withFan-withExpBoard.png" width="80%" height="80%">
 
-Note: You either need to cut a hole onto the bottom sheet or replace it with something new and larger feet (my plan).
+Note: You either need to cut a hole onto the bottom sheet or replace it with some new and larger feet (my plan).
 
-Note2: The original mainboard fan does not transport much air, but make quite some noise. So a slow turning 120mm fan is much better.
-The next source of noise is the fan in the power supply. With my Ender 3 V2 I replaced that fan with a low noise 92mm fan. Now it is barly audible.
+Note2: The original mainboard fan does not transport much air, but makes quite some noise. So a slow turning 120mm fan is much better.
+The next source of noise is the fan in the power supply. I replaced that fan with a low noise 120mm fan. Now it is barly audible.
 
 Note3: We need heigher feet. Already printed some test feet with 28mm height (need 40mm screws - probably will increase by 5mm when I have that screws available).
 
@@ -31,10 +31,17 @@ CR Touch is working fine.
 Even the Z-Tild option works very nice.
 Z Axis is silent (one reason I did all this, the original drivers for Z are very noisy).
 
-X and Y axis have some resonances when they move fast.
+X and Y axis have some resonances when they move fast. Turning stealthchop on reduced the resonances a lot.
 
 Extruder works and is calibrated.
 
 Bed mesh works (I am not happy with my bed yet).
 
-A test with an RGB ring was succesful.
+A test with an LED RGB ring was succesful.
+
+Note: I had issues with the Z axes (suddenly lots of noise, intermediatly running in wrong direction). To hunt this I added an extra SKR 3 E3 mini board for the Z Axes (Klipper is so flexible).
+
+At the end it turned out that the (new) cables to the steppers are faulty and provided not always a good contact. After replacing these, all was fine.
+
+Now I am back to the SKR 3 only.
+
