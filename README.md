@@ -11,20 +11,26 @@ Find my repo for the Monster8 here: https://github.com/FauthD/MksMonster8V2Sermo
 ## Mechanics
 Created an adapter to mount the SKR 3 since it does not fit to the mounting holes in the Sermnoon D1. Later I added some mounts for a big 120mm fan (because it was easier with a fan larger than the board). The fan runs with about 600 rmp and is barly audible.
 
-Since I planed to add an extra stepper for a auxilary feeder, some space for the BTT Exp board was neccessary (now we are at 3 flavours).
+Since I planed to add an extra stepper for a auxilary feeder, some space for the BTT Exp board was neccessary. Find the .stl and .scad files in directory SKR3-Adapter and below.
 
 | No fan | 120mm fan | 120mm fan + ext board |
 | :----: | :----: | :----: |
-| <img src="SKR3-Adapter/PNG/SKR3-Adapter.png" width="80%" height="80%"> | <img src="SKR3-Adapter/PNG/SKR3-Adapter-withFan.png" width="80%" height="80%"> | <img src="SKR3-Adapter/PNG/SKR3-Adapter-withFan-withExpBoard.png" width="80%" height="80%">
+| <img src="SKR3-Adapter/PNG/SKR3-Adapter.png"> | <img src="SKR3-Adapter/PNG/SKR3-Adapter-withFan.png"> | <img src="SKR3-Adapter/PNG/SKR3-Adapter-withFan-withExpBoard.png">
 
-Note: You either need to cut a hole onto the bottom sheet or replace it with some new and larger feet (my plan).
+Note: You either need to cut a hole onto the bottom sheet or replace it with some new bottom and larger feet. (Due to the board change I will not design a new bottom sheet for this board.)
 
 Note2: The original mainboard fan does not transport much air, but makes quite some noise. So a slow turning 120mm fan is much better.
-The next source of noise is the fan in the power supply. I replaced that fan with a low noise 120mm fan. Now it is barly audible.
+The next source of noise is the fan in the power supply. I replaced that fan with a low noise 120mm fan. Now it is barly audible and still produces a much better airflow. PSU stays cool even for long prints.
 
 Note3: We need heigher feet. Already printed some test feet with 28mm height (need 40mm screws - probably will increase by 5mm when I have that screws available).
 
 Note4: I cannot check whether the original wires are long enough since I did buy the printer used and the wires are not original anymore.
+
+### Photos:
+
+| Adapter | Mainboard | Step down regulators | Total |
+| :----: | :----: | :----: | :----: |
+| <img src="SKR3-Adapter/Pictures/BoardAdapter.jpg"> | <img src="SKR3-Adapter/Pictures/Mainboard.jpg"> | <img src="SKR3-Adapter/Pictures/StepDown.jpg"> | <img src="SKR3-Adapter/Pictures/complete.jpg"> |
 
 ## Klipper
 Installed MainsaleOS on a RPi, created the firmware and flashed.
